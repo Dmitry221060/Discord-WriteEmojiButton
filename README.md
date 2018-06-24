@@ -12,6 +12,6 @@ The script adds a button for writing texts using emotions
 * Go to [script.user.js](https://github.com/Dmitry221060/Discord-WriteEmojiButton/blob/master/script.user.js) and press the "Raw" button.
 
 ## USAGE
-* The first time you open Discord, the script will ask for permission to notify. Confirm it for convenient using.
+* The first time you open Discord, the script asks for permission to notify. Confirm it for convenient use.
 * Click at message options and choose "WriteEmoji". Now type your text and press enter. ![](https://b.radikal.ru/b43/1806/a7/3e110167f873.png)
 
