@@ -141,7 +141,8 @@
             if ($('.container-1rPqdX').length) {
                 $('.container-1rPqdX').append(
                     '<div class="button-1ZXqCA weightMedium-2iZe9B" onclick="$(\'#WriteEmojiInput\').attr(' +
-                    '\'style\', \'display: block; position: absolute; left: -33px; bottom: 0px;\'); $(\'#WriteEmojiInput\').focus();">' +
+                    '\'style\', \'display: block; position: absolute; left: calc(50% - 66px); bottom: 0px;\'); ' +
+                    '$(\'#WriteEmojiInput\').focus();">' +
                         'WriteEmoji' +
                         '<input id="WriteEmojiInput" style="display: none; position: absolute; left: 100px;" data-msgId="' + messageID + '" type="text">' +
                     '</div>'
