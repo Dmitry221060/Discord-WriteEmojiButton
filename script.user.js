@@ -138,10 +138,10 @@
         let elem = $(this.parentElement.parentElement.parentElement)[0];
         let messageID = elem[Object.keys(elem).filter(e => e.indexOf("__reactInternal") + 1)].return.return.key;
         (function buildButton() {
-            if ($('.option-popout.small-popout-box').length) {
-                $('.option-popout.small-popout-box').append(
-                    '<div onclick="$(\'#WriteEmojiInput\').attr(\'style\', \'display: block; position: absolute; left: -33px; bottom: 0px;\');' +
-                    '$(\'#WriteEmojiInput\').focus();" class="btn-item">' +
+            if ($('.container-1rPqdX').length) {
+                $('.container-1rPqdX').append(
+                    '<div class="button-1ZXqCA weightMedium-2iZe9B" onclick="$(\'#WriteEmojiInput\').attr(' +
+                    '\'style\', \'display: block; position: absolute; left: -33px; bottom: 0px;\'); $(\'#WriteEmojiInput\').focus();">' +
                         'WriteEmoji' +
                         '<input id="WriteEmojiInput" style="display: none; position: absolute; left: 100px;" data-msgId="' + messageID + '" type="text">' +
                     '</div>'
