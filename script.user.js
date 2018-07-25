@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WriteEmoji button
 // @namespace    https://discordapp.com/
-// @version      1.0.1
+// @version      1.0.2
 // @description  Adds a list item for writing texts using emojis
 // @author       Dmitry221060
 // @run-at       document-start
@@ -11,6 +11,9 @@
 // @grant        unsafeWindow
 // @grant        window.localStorage
 // ==/UserScript==
+
+const optionsContainer = ".container-1rPqdX",
+      optionsButton = ".button-3Jq0g9";
 
 (function() {
     'use strict';
@@ -134,12 +137,12 @@
         }
     };
 
-    $('body').on('click', '.btn-option', function () {
+    $('body').on('click', optionsButton, function () {
         let elem = $(this.parentElement.parentElement.parentElement)[0];
         let messageID = elem[Object.keys(elem).filter(e => e.indexOf("__reactInternal") + 1)].return.return.key;
         (function buildButton() {
-            if ($('.container-1rPqdX').length) {
-                $('.container-1rPqdX').append(
+            if ($(optionsContainer).length) {
+                $(optionsContainer).append(
                     '<div class="button-1ZXqCA weightMedium-2iZe9B" onclick="$(\'#WriteEmojiInput\').attr(' +
                     '\'style\', \'display: block; position: absolute; left: calc(50% - 66px); bottom: 0px;\'); ' +
                     '$(\'#WriteEmojiInput\').focus();">' +
