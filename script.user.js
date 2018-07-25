@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WriteEmoji button
 // @namespace    https://discordapp.com/
-// @version      1.0.3
+// @version      1.0.4
 // @description  Adds a list item for writing texts using emojis
 // @author       Dmitry221060
 // @run-at       document-start
@@ -17,7 +17,7 @@ const optionsContainer = ".container-3cGP6G",
 
 (function() {
     'use strict';
-    const token = window.localStorage.token || undefined;
+    const token = (window.localStorage && window.localStorage.token) || undefined;
     if (!token) return console.log('[WriteEmoji button] token is not found');
 
     if (Notification && Notification.permission == "default") Notification.requestPermission();
@@ -143,12 +143,16 @@ const optionsContainer = ".container-3cGP6G",
         (function buildButton() {
             if ($(optionsContainer).length) {
                 $(optionsContainer).append(
-                    '<div class="button-1ZXqCA weightMedium-2iZe9B" onclick="$(\'#WriteEmojiInput\').attr(' +
-                    '\'style\', \'display: block; position: absolute; left: calc(50% - 66px); bottom: 0px;\'); ' +
-                    '$(\'#WriteEmojiInput\').focus();">' +
-                        'WriteEmoji' +
-                        '<input id="WriteEmojiInput" style="display: none; position: absolute; left: 100px;" data-msgId="' + messageID + '" type="text">' +
-                    '</div>'
+                    '<button role="menuitem" type="button" class="item-2J1YMK button-38aScr lookBlank-3eh9lL ' + 
+                    'colorBrand-3pXr91 grow-q77ONN">' + 
+                        '<div class="contents-18-Yxp" onclick="$(\'#WriteEmojiInput\').attr(\'style\', ' + 
+                        '\'display: block; position: absolute; left: calc(50% - 66px); bottom: 0px;\'); ' + 
+                        '$('#WriteEmojiInput').focus();">' +
+                            'WriteEmoji' + '
+                            '<input id="WriteEmojiInput" style="display: none; position: absolute; left: 100px;" ' + 
+                            'data-msgid="null" type="text">' + 
+                        '</div>' + 
+                    '</button>'
                 );
             } else {
                 setTimeout(() => { buildButton(); }, 50);
