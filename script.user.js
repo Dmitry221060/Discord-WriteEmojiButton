@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WriteEmoji button
 // @namespace    https://discordapp.com/
-// @version      1.0.4
+// @version      1.0.5
 // @description  Adds a list item for writing texts using emojis
 // @author       Dmitry221060
 // @run-at       document-start
@@ -139,19 +139,20 @@ const optionsContainer = ".container-3cGP6G",
 
     $('body').on('click', optionsButton, function () {
         let elem = $(this.parentElement.parentElement.parentElement)[0];
-        let messageID = elem[Object.keys(elem).filter(e => e.indexOf("__reactInternal") + 1)].return.return.key;
+        let temp = elem[Object.keys(elem).filter(e => e.indexOf("__reactInternal") + 1)];
+        while (!temp.key) temp = temp.return; //Находим ID сообщения
         (function buildButton() {
             if ($(optionsContainer).length) {
                 $(optionsContainer).append(
-                    '<button role="menuitem" type="button" class="item-2J1YMK button-38aScr lookBlank-3eh9lL ' + 
-                    'colorBrand-3pXr91 grow-q77ONN">' + 
-                        '<div class="contents-18-Yxp" onclick="$(\'#WriteEmojiInput\').attr(\'style\', ' + 
-                        '\'display: block; position: absolute; left: calc(50% - 66px); bottom: 0px;\'); ' + 
-                        '$('#WriteEmojiInput').focus();">' +
-                            'WriteEmoji' + 
-                            '<input id="WriteEmojiInput" style="display: none; position: absolute; left: 100px;" ' + 
-                            'data-msgid="null" type="text">' + 
-                        '</div>' + 
+                    '<button role="menuitem" type="button" class="item-2J1YMK button-38aScr lookBlank-3eh9lL ' +
+                    'colorBrand-3pXr91 grow-q77ONN">' +
+                        '<div class="contents-18-Yxp" onclick="$(\'#WriteEmojiInput\').attr(\'style\', ' +
+                        '\'display: block; position: absolute; left: calc(50% - 66px); bottom: 0px;\'); ' +
+                        '$(\'#WriteEmojiInput\').focus();">' +
+                            'WriteEmoji' +
+                            '<input id="WriteEmojiInput" style="display: none; position: absolute; left: 100px;" ' +
+                            'data-msgid="' + temp.key + '" type="text">' +
+                        '</div>' +
                     '</button>'
                 );
             } else {
