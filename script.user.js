@@ -148,7 +148,7 @@ const optionsContainer = ".container-3cGP6G",
                         '<div class="contents-18-Yxp" onclick="$(\'#WriteEmojiInput\').attr(\'style\', ' + 
                         '\'display: block; position: absolute; left: calc(50% - 66px); bottom: 0px;\'); ' + 
                         '$('#WriteEmojiInput').focus();">' +
-                            'WriteEmoji' + '
+                            'WriteEmoji' + 
                             '<input id="WriteEmojiInput" style="display: none; position: absolute; left: 100px;" ' + 
                             'data-msgid="null" type="text">' + 
                         '</div>' + 
