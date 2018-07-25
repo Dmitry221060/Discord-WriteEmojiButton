@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WriteEmoji button
 // @namespace    https://discordapp.com/
-// @version      1.0.2
+// @version      1.0.3
 // @description  Adds a list item for writing texts using emojis
 // @author       Dmitry221060
 // @run-at       document-start
@@ -12,12 +12,12 @@
 // @grant        window.localStorage
 // ==/UserScript==
 
-const optionsContainer = ".container-1rPqdX",
+const optionsContainer = ".container-3cGP6G",
       optionsButton = ".button-3Jq0g9";
 
 (function() {
     'use strict';
-    const token = window.localStorage.token;
+    const token = window.localStorage.token || undefined;
     if (!token) return console.log('[WriteEmoji button] token is not found');
 
     if (Notification && Notification.permission == "default") Notification.requestPermission();
