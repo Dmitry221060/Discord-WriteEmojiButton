@@ -15,7 +15,7 @@ const optionsContainer = ".container-3cGP6G",
 (function() {
     'use strict';
     $('body').append('<iframe id="WriteEmojiLS" style="display:none"></iframe>');
-    const token = $('#LS')[0].contentWindow.localStorage.token;
+    const token = $('#WriteEmojiLS')[0].contentWindow.localStorage.token;
     $('#WriteEmojiLS').remove();
     if (!token) return console.log('[WriteEmoji button] token is not found');
 
