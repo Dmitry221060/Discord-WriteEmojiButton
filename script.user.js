@@ -1,15 +1,12 @@
 // ==UserScript==
 // @name         WriteEmoji button
 // @namespace    https://discordapp.com/
-// @version      1.0.5
+// @version      1.0.6
 // @description  Adds a list item for writing texts using emojis
 // @author       Dmitry221060
-// @run-at       document-start
 // @include      https://discordapp.com/channels/*
 // @require      https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js
 // @require      https://raw.githubusercontent.com/yanatan16/nanoajax/master/nanoajax.min.js
-// @grant        unsafeWindow
-// @grant        window.localStorage
 // ==/UserScript==
 
 const optionsContainer = ".container-3cGP6G",
@@ -17,13 +14,14 @@ const optionsContainer = ".container-3cGP6G",
 
 (function() {
     'use strict';
-    const token = (window.localStorage && window.localStorage.token) || undefined;
+    $('body').append('<iframe id="WriteEmojiLS" style="display:none"></iframe>');
+    const token = $('#LS')[0].contentWindow.localStorage.token;
+    $('#WriteEmojiLS').remove();
     if (!token) return console.log('[WriteEmoji button] token is not found');
 
     if (Notification && Notification.permission == "default") Notification.requestPermission();
 
-    unsafeWindow.$ = jQuery;
-    unsafeWindow.writeEmoji = function (msgId, content) {
+    window.writeEmoji = function (msgId, content) {
         let emoteList = {
             "back": ["🔙"],
             "cool": ["🆒"],
@@ -146,11 +144,9 @@ const optionsContainer = ".container-3cGP6G",
                 $(optionsContainer).append(
                     '<button role="menuitem" type="button" class="item-2J1YMK button-38aScr lookBlank-3eh9lL ' +
                     'colorBrand-3pXr91 grow-q77ONN">' +
-                        '<div class="contents-18-Yxp" onclick="$(\'#WriteEmojiInput\').attr(\'style\', ' +
-                        '\'display: block; position: absolute; left: calc(50% - 66px); bottom: 0px;\'); ' +
-                        '$(\'#WriteEmojiInput\').focus();">' +
+                        '<div id="WriteEmojiItem" class="contents-18-Yxp">' +
                             'WriteEmoji' +
-                            '<input id="WriteEmojiInput" style="display: none; position: absolute; left: 100px;" ' +
+                            '<input id="WriteEmojiInput" style="display: none;" ' +
                             'data-msgid="' + temp.key + '" type="text">' +
                         '</div>' +
                     '</button>'
@@ -159,6 +155,11 @@ const optionsContainer = ".container-3cGP6G",
                 setTimeout(() => { buildButton(); }, 50);
             }
         })();
+    });
+
+    $('body').on('click', '#WriteEmojiItem', () => {
+        $('#WriteEmojiInput').attr('style', 'display: block; position: absolute; left: calc(50% - 66px); bottom: 0px;');
+        $('#WriteEmojiInput').focus();
     });
 
     $('body').on('keypress, keyup, keydown', '#WriteEmojiInput', function (e) {
