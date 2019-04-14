@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WriteEmoji button
 // @namespace    https://discordapp.com/
-// @version      1.0.6
+// @version      1.1.0
 // @description  Adds a list item for writing texts using emojis
 // @author       Dmitry221060
 // @include      https://discordapp.com/channels/*
@@ -11,14 +11,16 @@
 
 const optionsContainer = ".container-3cGP6G",
       optionsButton = ".button-3Jq0g9";
-
-(function() {
+setTimeout(run, 2000);
+function run() {
     'use strict';
     $('body').append('<iframe id="WriteEmojiLS" style="display:none"></iframe>');
     const token = $('#WriteEmojiLS')[0].contentWindow.localStorage.token;
     $('#WriteEmojiLS').remove();
-    if (!token) return console.log('[WriteEmoji button] token is not found');
-
+    if (!token || token == "null") {
+        if (window.location.pathname == "/login") return $(document).on("click", 'form[class*="authBox"] button[type="submit"]', () => {setTimeout(run, 5000)});
+        return console.log('[WriteEmoji button] token is not found');
+    }
     if (Notification && Notification.permission == "default") Notification.requestPermission();
 
     window.writeEmoji = function (msgId, content) {
@@ -53,7 +55,7 @@ const optionsContainer = ".container-3cGP6G",
             "i": ["🇮","ℹ","🥄","📍","1⃣"],
             "j": ["🇯","🌶"],
             "k": ["🇰"],
-            "l": ["🇱","👢"],
+            "l": ["🇱","👢","📐"],
             "m": ["🇲","Ⓜ","♏","♍"],
             "n": ["🇳","♑","⚡","📈"],
             "o": ["🇴","🅾","⭕","🔄","0⃣"],
@@ -99,18 +101,14 @@ const optionsContainer = ".container-3cGP6G",
                         if (emoteList[letter].length) {
                             wordsOfEmoji[i][index] = emoteList[letter][0];
                             lettersCount += letter.length;
-                            tempContent[i] = tempContent[i].replace(letter, ' '); //Корректируем индекс, чтобы избежать проблем с длинными эмоциями
-                            emoteList[letter].splice(0, 1);
+                            tempContent[i] = tempContent[i].replace(letter, letter.split(/./).join(" ")); //Заменяем каждую букву, для которой нашли сопоставление на пробел(чтобы избежать проблем с длинными реакциями)
+                            emoteList[letter].splice(0, 1); //Убираем реакцию из списка возможных для проставления
                             if (lettersCount == content[i].length) break cont;
                         } else if (letter.length == 1) { //Если не хватает одиночной буквы
                             new Notification("WriteEmoji button", {body: 'You use too much "' + letter + '"'});
                             break stop;
                         }
                     }
-                }
-                if (k == 15) {
-                    new Notification("WriteEmoji button", {body: "You do something wrong"});
-                    break stop;
                 }
             }
             if (i + 1 == content.length) { //Если последнее слово обработано
@@ -167,4 +165,4 @@ const optionsContainer = ".container-3cGP6G",
         e.preventDefault();
         writeEmoji(this.dataset.msgid, this.value.replace(/[^a-zA-Z0-9\!\?\+\- ]/g, ''));
     });
-})();
+}
