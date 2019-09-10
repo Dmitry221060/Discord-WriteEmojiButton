@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WriteEmoji button
 // @namespace    https://discordapp.com/
-// @version      1.1.0
+// @version      1.1.1
 // @description  Adds a list item for writing texts using emojis
 // @author       Dmitry221060
 // @include      https://discordapp.com/channels/*
@@ -9,7 +9,7 @@
 // @require      https://raw.githubusercontent.com/yanatan16/nanoajax/master/nanoajax.min.js
 // ==/UserScript==
 
-const optionsContainer = ".container-3cGP6G",
+const optionsContainer = ".itemGroup-1tL0uz",
       optionsButton = ".button-3Jq0g9";
 setTimeout(run, 2000);
 function run() {
@@ -140,14 +140,14 @@ function run() {
         (function buildButton() {
             if ($(optionsContainer).length) {
                 $(optionsContainer).append(
-                    '<button role="menuitem" type="button" class="item-2J1YMK button-38aScr lookBlank-3eh9lL ' +
-                    'colorBrand-3pXr91 grow-q77ONN">' +
-                        '<div id="WriteEmojiItem" class="contents-18-Yxp">' +
+                    '<div tabindex="0" class="item-1Yvehc itemBase-tz5SeC clickable-11uBi- item-2J1YMK" role="menuitem" ' +
+                    'style="overflow: visible;">' +
+                        '<div id="WriteEmojiItem" class="label-JWQiNe">' +
                             'WriteEmoji' +
                             '<input id="WriteEmojiInput" style="display: none;" ' +
                             'data-msgid="' + temp.key + '" type="text">' +
                         '</div>' +
-                    '</button>'
+                    '</div>'
                 );
             } else {
                 setTimeout(() => { buildButton(); }, 50);
