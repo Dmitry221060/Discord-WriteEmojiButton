@@ -119,7 +119,7 @@ function run() {
 
         function setEmoji(msgId, lettersToWrite, setedLetters) {
             nanoajax.ajax({
-                url: 'https://discordapp.com/api/v6/channels/' + window.location.pathname.split('/').pop() + '/messages/' + msgId + '/reactions/' +
+                url: 'https://discordapp.com/api/v6/channels/' + window.location.pathname.split('/')[3] + '/messages/' + msgId + '/reactions/' +
                      lettersToWrite[setedLetters] + '/@me',
                 method: 'PUT',
                 headers: {
