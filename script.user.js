@@ -6,11 +6,10 @@
 // @author       Dmitry221060
 // @include      https://discordapp.com/channels/*
 // @require      https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js
-// @require      https://raw.githubusercontent.com/yanatan16/nanoajax/master/nanoajax.min.js
 // ==/UserScript==
 
 const optionsContainer = ".itemGroup-1tL0uz",
-      optionsButton = ".button-3Jq0g9";
+      optionsButton    = ".button-3Jq0g9";
 setTimeout(run, 2000);
 function run() {
     'use strict';
@@ -118,17 +117,18 @@ function run() {
         }
 
         function setEmoji(msgId, lettersToWrite, setedLetters) {
-            nanoajax.ajax({
+            $.ajax({
                 url: 'https://discordapp.com/api/v6/channels/' + window.location.pathname.split('/')[3] + '/messages/' + msgId + '/reactions/' +
                      lettersToWrite[setedLetters] + '/@me',
                 method: 'PUT',
                 headers: {
                     authorization: token.replace(/^"|"$/g, ''),
                     "content-type": "application/json"
+                },
+                complete: res => {
+                    if (res.status == 429) return setTimeout(() => { setEmoji(msgId, lettersToWrite, setedLetters); }, 100);
+                    if (res.status != 400 && ++setedLetters != lettersToWrite.length) setEmoji(msgId, lettersToWrite, setedLetters);
                 }
-            }, resCode => {
-                if (resCode == 429) return setTimeout(() => { setEmoji(msgId, lettersToWrite, setedLetters); }, 100);
-                if (resCode != 400 && ++setedLetters != lettersToWrite.length) setEmoji(msgId, lettersToWrite, setedLetters);
             });
         }
     };
