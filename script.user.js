@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WriteEmoji button
 // @namespace    https://discordapp.com/
-// @version      1.1.1
+// @version      1.1.2
 // @description  Adds a list item for writing texts using emojis
 // @author       Dmitry221060
 // @include      https://discordapp.com/channels/*
