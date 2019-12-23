@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WriteEmoji button
 // @namespace    https://discordapp.com/
-// @version      1.1.2
+// @version      1.1.3
 // @description  Adds a list item for writing texts using emojis
 // @author       Dmitry221060
 // @include      https://discordapp.com/channels/*
@@ -87,36 +87,45 @@ function run() {
         };
         let wordsOfEmoji = []; //Массив со словами, написанными реакциями
         content = content.replace(/\s+/g, ' ').toLowerCase().split(' ');
-        let tempContent = content.concat(); //concat нужен чтобы поместить в переменную копию массива, а не ссылку на него
+        let words = content.concat();
         stop:
-        for (let i = 0; i < content.length; i++) {
+        for (let i = 0; i < content.length; i++) { //TODO переделать с нуля
             let lettersCount = 0;
             wordsOfEmoji[i] = [];
             cont:
-            for (let k = 0; k < 15; k++) { //Этот цикл нужен чтобы заменять на реакции повторяющиеся буквы. 15 - ограничение, чтобы избежать рекурсии
+            for (let k = 0; k < 15; k++) { //Заменяем повторяющиеся буквы на реакции. 15 - ограничение, чтобы избежать рекурсии
                 for (let letter in emoteList) { //Ищем в слове всевозможные буквы
-                    let index = tempContent[i].indexOf(letter);
+                    let index = words[i].indexOf(letter);
                     if (index + 1) {
                         if (emoteList[letter].length) {
                             wordsOfEmoji[i][index] = emoteList[letter][0];
                             lettersCount += letter.length;
-                            tempContent[i] = tempContent[i].replace(letter, letter.split(/./).join(" ")); //Заменяем каждую букву, для которой нашли сопоставление на пробел(чтобы избежать проблем с длинными реакциями)
+                            words[i] = words[i].replace(letter, letter.split(/./).join(" ")); //Заменяем каждую букву, для которой нашли сопоставление на пробел(чтобы избежать проблем с длинными реакциями)
                             emoteList[letter].splice(0, 1); //Убираем реакцию из списка возможных для проставления
                             if (lettersCount == content[i].length) break cont;
-                        } else if (letter.length == 1) { //Если не хватает одиночной буквы
+                        } else if (letter.length == 1) {
                             new Notification("WriteEmoji button", {body: 'You use too much "' + letter + '"'});
                             break stop;
                         }
                     }
                 }
             }
-            if (i + 1 == content.length) { //Если последнее слово обработано
-                wordsOfEmoji = [].concat.apply([], wordsOfEmoji).filter(String); //Объединить все подмассивы и вырезать пустые значения
-                setEmoji(msgId, wordsOfEmoji, 0);
-            }
         }
 
+        let finished = false;
+        //Из-за появляющейся кнопки "Реакции" - нужно перемещать нашу кнопку в конец списка
+        const MO = new MutationObserver(() => {
+            if (finished) MO.disconnect();
+            const listItem = document.querySelector(".itemGroup-1tL0uz > div:first-child");
+            if (listItem.children[0].id != "WriteEmojiItem") return;
+            $(listItem).appendTo($(listItem).parent());
+        });
+        MO.observe(document.querySelector(optionsContainer), {childList: true, subtree: true});
+        wordsOfEmoji = Array.prototype.concat.apply([], wordsOfEmoji).filter(String); //Объединить все подмассивы и вырезать пустые значения
+        setEmoji(msgId, wordsOfEmoji, 0);
+
         function setEmoji(msgId, lettersToWrite, setedLetters) {
+            if (setedLetters >= lettersToWrite.length) return finished = true;
             $.ajax({
                 url: 'https://discordapp.com/api/v6/channels/' + window.location.pathname.split('/')[3] + '/messages/' + msgId + '/reactions/' +
                      lettersToWrite[setedLetters] + '/@me',
@@ -127,7 +136,11 @@ function run() {
                 },
                 complete: res => {
                     if (res.status == 429) return setTimeout(() => { setEmoji(msgId, lettersToWrite, setedLetters); }, 100);
-                    if (res.status != 400 && ++setedLetters != lettersToWrite.length) setEmoji(msgId, lettersToWrite, setedLetters);
+                    if (res.status == 400) {
+                        finished = true;
+                        throw new Error("[WriteEmoji button] Bad Request:\n" + JSON.stringify(res));
+                    }
+                    setEmoji(msgId, lettersToWrite, ++setedLetters);
                 }
             });
         }
@@ -147,11 +160,10 @@ function run() {
                             '<input id="WriteEmojiInput" style="display: none;" ' +
                             'data-msgid="' + temp.key + '" type="text">' +
                         '</div>' +
+                        '<div class="hint-22uc-R"></div>' +
                     '</div>'
                 );
-            } else {
-                setTimeout(() => { buildButton(); }, 50);
-            }
+            } else setTimeout(buildButton, 50);
         })();
     });
 
